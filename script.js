@@ -57,24 +57,30 @@ function newTask() {
 
 // Handle task text edits
 function editTask(e) {
-  // Collect new task from user input
-  updatedTask = e.target.value
-  taskId = e.target.parentElement.id
-  if (updatedTask != '') {
-    console.log("Updating task '"+taskId+"' with text '"+updatedTask+"'")
+  chrome.storage.sync.get(['tasks'], function(result) {
+    // Collect new task from user input
+    updatedTask = e.target.value
+    taskId = e.target.parentElement.id
+    currentTask = result['tasks'][taskId]['task']
 
-    taskGetSet(taskId, {
-      "task": updatedTask,
-      "status": "unchecked"
-    })
-  } else {
-    console.log("Deleting task '"+taskId+"' due to empty string");
-    taskGetSet(taskId, {
-      "status": "delete"
-    });
-  }
+    if (updatedTask == '') {
+      console.log("Deleting task '"+taskId+"' due to empty string");
+      taskGetSet(taskId, {
+        "status": "delete"
+      });
+    } else if (updatedTask == currentTask) {
+      console.log("Aborting task edit as task is unchanged.")
+    } else {
+      console.log("Updating task '"+taskId+"' with text '"+updatedTask+"'")
+
+      taskGetSet(taskId, {
+        "task": updatedTask,
+        "status": "unchecked"
+      })
+    }
+
+  })
 };
-
 
 // Build HTML task list
 function buildTaskList() {
