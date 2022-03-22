@@ -1,0 +1,19 @@
+{
+    "name": "SimpleToDo",
+    "version": "0.1.0",
+    "description": "Straight-forward, no-frills, in-browser to-do list.",
+    "manifest_version": 3,
+    "author": "Matt Ravenhall",
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "SimpleToDo"
+    },
+    "icons": {
+        "16": "icon_16.png",
+        "48": "icon_48.png",
+        "128": "icon_128.png"
+    },
+    "permissions": [
+        "storage"
+    ]
+}
