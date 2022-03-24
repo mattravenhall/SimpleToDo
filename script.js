@@ -12,23 +12,23 @@ function taskGetSet(taskId, taskObject) {
 
       // Handle task deletion
       if (taskObject['status'] == 'delete') {
-        console.log('Deleting task: '+taskId);
+        // console.log('Deleting task: '+taskId);
         delete latestTasks[taskId];
       } else {
 
         // Prep latestTasks if it's undefined
         if (typeof result.tasks == 'undefined') {
-          console.log("Prepping absent task list");
+          // console.log("Prepping absent task list");
           latestTasks = {};
         }
 
         // Auto-generate ids for new tasks
         if (taskId == "new") {
           taskId = 'task_'+(new Date()).getTime()+'_'+Math.floor(Math.random()*100000).toString(16);
-          console.log("Creating a new task with id '"+taskId+"'");
+          // console.log("Creating a new task with id '"+taskId+"'");
         }
 
-        console.log("Updating task '"+taskId+"'");
+        // console.log("Updating task '"+taskId+"'");
         latestTasks[taskId] = taskObject;
       }
       chrome.storage.sync.set({"tasks": latestTasks});
@@ -39,7 +39,7 @@ function taskGetSet(taskId, taskObject) {
 function newTask() {
   // Grab task name from New Task box
   var inputValue = document.getElementById("newTask").value;
-  console.log('inputValue: ' + inputValue);
+  // console.log('inputValue: ' + inputValue);
 
   // Handle detected input (esp. if empty)
   if (inputValue === '') {
@@ -64,14 +64,14 @@ function editTask(e) {
     currentTask = result['tasks'][taskId]['task']
 
     if (updatedTask == '') {
-      console.log("Deleting task '"+taskId+"' due to empty string");
+      // console.log("Deleting task '"+taskId+"' due to empty string");
       taskGetSet(taskId, {
         "status": "delete"
       });
     } else if (updatedTask == currentTask) {
-      console.log("Aborting task edit as task is unchanged.")
+      // console.log("Aborting task edit as task is unchanged.")
     } else {
-      console.log("Updating task '"+taskId+"' with text '"+updatedTask+"'")
+      // console.log("Updating task '"+taskId+"' with text '"+updatedTask+"'")
 
       taskGetSet(taskId, {
         "task": updatedTask,
@@ -91,10 +91,10 @@ function buildTaskList() {
     if (typeof result.tasks == 'undefined') {
       // Set default if no tasks are found
       tasks = {};
-      console.log('No tasks found.' + Object.keys(tasks).length);
+      // console.log('No tasks found.' + Object.keys(tasks).length);
     } else {
       tasks = result.tasks;
-      console.log('Tasks are ' + result.tasks + ' len ' + Object.keys(tasks).length);
+      // console.log('Tasks are ' + result.tasks + ' len ' + Object.keys(tasks).length);
     }
 
     if (Object.keys(tasks).length == 0) {
@@ -109,8 +109,8 @@ function buildTaskList() {
         var taskName = Object.values(tasks)[i]['task'];
         var taskStatus = Object.values(tasks)[i]['status'];
 
-        console.log('li taskName: ' + taskName);
-        console.log('li taskStatus: ' + taskStatus);
+        // console.log('li taskName: ' + taskName);
+        // console.log('li taskStatus: ' + taskStatus);
 
         // Create the list item:
         var item = document.createElement('li');
@@ -123,10 +123,10 @@ function buildTaskList() {
 
         // Set checked/unchecked status
         if (taskStatus == "checked") {
-          console.log("Setting task '"+taskId+"' to checked");
+          // console.log("Setting task '"+taskId+"' to checked");
           taskText.classList.add("checked");
         } else {
-          console.log("Setting task '"+taskId+"' to unchecked");
+          // console.log("Setting task '"+taskId+"' to unchecked");
           taskText.classList.remove("checked");
         }
 
@@ -136,7 +136,7 @@ function buildTaskList() {
         // Trigger task updates when enter is pressed
         taskText.addEventListener("keyup", function(e) {  // Response to 'enter' in New Task box 
           if (e.keyCode === 13) {
-            console.log("Enter press detected");
+            // console.log("Enter press detected");
             e.preventDefault();
             editTask(e);
           }
@@ -144,7 +144,7 @@ function buildTaskList() {
 
         // Trigger task updates on focus loss)
         taskText.addEventListener("blur", function(e) {
-          console.log("Focus loss detected");
+          // console.log("Focus loss detected");
           editTask(e);
         });
 
@@ -163,15 +163,15 @@ function buildTaskList() {
         spanCheck.addEventListener("click", function(e) {
           taskId = e.target.parentElement.id
           if (e.target.parentElement.tagName === 'LI') {
-            console.log('Heard task: ' + taskId);
+            // console.log('Heard task: ' + taskId);
             // Flip taskStatus accordingly
             if (e.target.parentElement.firstChild.classList.contains("checked")) {
               taskStatus = "unchecked";
-              console.log("Status is now unchecked")
+              // console.log("Status is now unchecked")
               // e.target.parentElement.classList.remove("checked")
             } else {
               taskStatus = "checked";
-              console.log("Status is now checked")
+              // console.log("Status is now checked")
               // e.target.parentElement.classList.add("checked")
             }
 
